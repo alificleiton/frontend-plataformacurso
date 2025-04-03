@@ -26,6 +26,18 @@
   --dark-accent: #64b5f6;
   --dark-border: #444444;
   --dark-hover-bg: rgba(255, 255, 255, 0.1);
+
+  /*modal*/
+  --modal-bg: #ffffff;
+  --modal-border: #e2e8f0;
+  --text-primary: #1a202c;
+  --text-secondary: #4a5568;
+  --input-border: #e2e8f0;
+  --input-bg: #ffffff;
+  --primary-color: #4299e1;
+  --primary-dark: #3182ce;
+  --button-border: #e2e8f0;
+  --hover-bg: #f7fafc;
 }
 
 /* Layout principal */
@@ -497,3 +509,182 @@
     border-radius: 4px;
     margin-bottom: 15px;
   }
+
+
+  /* Modal styles */
+  /* Modal Overlay - Fundo mais equilibrado */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Opacidade ajustada */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(3px);
+}
+
+/* Modal Container */
+.modal {
+  background-color: var(--modal-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--modal-border);
+  animation: modalFadeIn 0.3s ease;
+}
+
+/* Botão Fechar (X) - Posicionamento visível */
+.closeModal {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeModal:hover {
+  color: var(--text-primary);
+  background-color: var(--hover-bg);
+}
+
+/* Espaçamento e organização do conteúdo */
+.modalHeader {
+  margin-bottom: 1.8rem;
+  padding-right: 2rem; /* Espaço para o botão fechar */
+}
+
+.modalHeader h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.userId {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+  opacity: 0.8;
+}
+
+/* Form Sections */
+.formSection {
+  margin-bottom: 2rem;
+}
+
+.formSection h3 {
+  margin: 0 0 1.2rem 0;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* Input Fields */
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.6rem;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.formInput {
+  display: block;
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: var(--input-bg);
+  transition: border-color 0.2s;
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
+}
+
+/* Botões */
+.formFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.cancelButton {
+  padding: 0.8rem 1.5rem;
+  border: 1px solid var(--button-border);
+  border-radius: 8px;
+  background: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text-primary);
+}
+
+.cancelButton:hover {
+  background-color: var(--hover-bg);
+}
+
+.saveButton {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--primary-color);
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.saveButton:hover {
+  background-color: var(--primary-dark);
+}
+
+/* Animações */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+.dark {
+  --modal-bg: #2d3748;
+  --modal-border: #4a5568;
+  --text-primary: #f7fafc;
+  --text-secondary: #cbd5e0;
+  --input-border: #4a5568;
+  --input-bg: #2d3748;
+  --primary-color: #4299e1;
+  --primary-dark: #3182ce;
+  --button-border: #4a5568;
+  --hover-bg: #4a5568;
+}

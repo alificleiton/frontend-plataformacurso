@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { FiMoon, FiSun, FiMenu, FiX, FiHome, FiUsers, FiBook, FiEdit2, FiTrash2 } from 'react-icons/fi';
 import styles from './admin.module.css';
 
+
 interface User {
   _id: string;
   name: string;
@@ -33,6 +34,13 @@ export default function AdminPage() {
   const [filters, setFilters] = useState({
     search: '',
     role: '',
+  });
+
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [editForm, setEditForm] = useState({
+    name: '',
+    email: '',
+    role: 'admin' as 'admin' | 'professor' | 'aluno',
   });
 
   // Configura responsividade e tema
@@ -121,6 +129,52 @@ export default function AdminPage() {
     } catch (err: any) {
       setError(err instanceof Error ? err.message : 'Erro desconhecido ao excluir usuário');
       console.error('Erro ao excluir usuário:', err);
+    }
+  };
+
+  // Após a função handleDeleteUser
+  const handleEditClick = (user: User) => {
+    setEditingUser(user);
+    setEditForm({
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    });
+  };
+
+  const handleEditFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setEditForm({
+      ...editForm,
+      [name]: name === 'role' ? value as 'admin' | 'professor' | 'aluno' : value,
+    });
+  };
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingUser) return;
+
+    try {
+      const token = localStorage.getItem('authToken');
+      const response = await fetch(`http://localhost:3000/auth/users/${editingUser._id}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editForm),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Erro ao atualizar usuário');
+      }
+
+      setEditingUser(null);
+      fetchUsers();
+    } catch (err: any) {
+      setError(err instanceof Error ? err.message : 'Erro desconhecido ao atualizar usuário');
+      console.error('Erro ao atualizar usuário:', err);
     }
   };
 
@@ -280,7 +334,7 @@ export default function AdminPage() {
                             <td>{new Date(user.createdAt).toLocaleDateString()}</td>
                             <td>
                               <div className={styles.actions}>
-                                <button className={styles.editBtn}>
+                                <button className={styles.editBtn}  onClick={() => handleEditClick(user)}>
                                   <FiEdit2 size={16} />
                                 </button>
                                 <button 
@@ -329,6 +383,97 @@ export default function AdminPage() {
               )}
             </div>
           )}
+
+          {editingUser && (
+            <div className={styles.modalOverlay}>
+              {editingUser && (
+                <div className={styles.modalOverlay}>
+                  <div className={styles.modal}>
+                    <div className={styles.modalHeader}>
+                      <h2>Editar Usuário</h2>
+                      <span className={styles.userId}>ID: {editingUser._id}</span>
+                      <button 
+                        className={styles.closeModal}
+                        onClick={() => setEditingUser(null)}
+                        aria-label="Fechar modal"
+                      >
+                        <FiX size={20} />
+                      </button>
+                    </div>
+                    
+                    <form onSubmit={handleEditSubmit} className={styles.editForm}>
+                      <div className={styles.formSection}>
+                        <h3>Informações Básicas</h3>
+                        
+                        <div className={styles.formGroup}>
+                          <label htmlFor="name">Nome Completo</label>
+                          <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            value={editForm.name}
+                            onChange={handleEditFormChange}
+                            required
+                            className={styles.formInput}
+                          />
+                        </div>
+                        
+                        <div className={styles.formGroup}>
+                          <label htmlFor="email">Endereço de Email</label>
+                          <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={editForm.email}
+                            onChange={handleEditFormChange}
+                            required
+                            className={styles.formInput}
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className={styles.formSection}>
+                        <h3>Configurações de Perfil</h3>
+                        
+                        <div className={styles.formGroup}>
+                          <label htmlFor="role">Tipo de Usuário</label>
+                          <select
+                            id="role"
+                            name="role"
+                            value={editForm.role}
+                            onChange={handleEditFormChange}
+                            required
+                            className={styles.formInput}
+                          >
+                            <option value="admin">Administrador</option>
+                            <option value="professor">Professor</option>
+                            <option value="aluno">Aluno</option>
+                          </select>
+                        </div>
+                      </div>
+                      
+                      <div className={styles.formFooter}>
+                        <button 
+                          type="button" 
+                          className={styles.cancelButton}
+                          onClick={() => setEditingUser(null)}
+                        >
+                          Cancelar
+                        </button>
+                        <button 
+                          type="submit" 
+                          className={styles.saveButton}
+                        >
+                          Salvar Alterações
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+          
         </div>
       </main>
     </div>
