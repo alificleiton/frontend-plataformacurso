@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import styles from './Login.module.css';
 import { decodeJWT } from "../lib/auth";
+import { signIn } from "next-auth/react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -142,6 +143,16 @@ export default function Login() {
             Não tem uma conta?{" "}
             <a href="/register">Cadastre-se</a>
           </p>
+        </div>
+
+        <div className={styles.googleLogin}>
+          <button
+            type="button"
+            onClick={() => signIn('google')}
+            className={styles.googleButton}
+          >
+            Entrar com Google
+          </button>
         </div>
       </div>
     </div>

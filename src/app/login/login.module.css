@@ -225,3 +225,26 @@
     text-decoration: underline;
     color: #1d4ed8;
   }
+
+  .googleLogin {
+    margin-top: 1rem;
+    text-align: center;
+  }
+  
+  .googleButton {
+    background-color: #ffffff;
+    color: #1f2937;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s;
+  }
+  
+  .googleButton:hover {
+    background-color: #f3f4f6;
+    border-color: #9ca3af;
+  }
