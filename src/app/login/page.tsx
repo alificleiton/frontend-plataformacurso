@@ -113,7 +113,7 @@ export default function Login() {
                 <label htmlFor="remember-me">Lembrar de mim</label>
               </div>
 
-              <a href="#" className={styles.forgotPassword}>
+              <a href="/forgot-password" className={styles.forgotPassword}>
                 Esqueceu a senha?
               </a>
             </div>
