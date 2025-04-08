@@ -6,4 +6,5 @@ export type User = {
     role: 'admin' | 'professor' | 'aluno';
     exp?: number; // Timestamp de expiração
     iat?: number; // Timestamp de emissão
+    avatarUrl?: string; // 👈 Adicione isso
   };

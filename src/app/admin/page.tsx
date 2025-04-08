@@ -11,8 +11,23 @@ interface User {
   name: string;
   email: string;
   role: 'admin' | 'professor' | 'aluno';
+  avatarUrl: string, // Use o ? se for opcional
   createdAt: string;
 }
+
+const SidebarLogo = ({ user }: { user: any }) => {
+  const [imgSrc, setImgSrc] = useState(user.avatarUrl?.trim() || '/default-avatar.png');
+
+  return (
+    <div className={styles.sidebarLogo}>
+      <img
+        src={imgSrc}
+        alt={`Avatar de ${user.avatarUrl}`}
+        onError={() => setImgSrc('/default-avatar.png')}
+      />
+    </div>
+  );
+};
 
 export default function AdminPage() {
   const { user, loading } = useAuth();
@@ -222,6 +237,10 @@ export default function AdminPage() {
           <span className={styles.userInfo}>
             Bem-vindo, <strong>{user.name}</strong>
           </span>
+          
+          <SidebarLogo user={user} />
+
+          
         </div>
       </header>
 

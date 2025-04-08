@@ -7,6 +7,7 @@ interface DecodedToken {
   sub: string;
   iat: number;
   exp: number;
+  avatarUrl?: string; // 👈 Adicione isso
 }
 
 // Adicione esta função se não existir
