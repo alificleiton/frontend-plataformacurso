@@ -1,8 +1,9 @@
 'use client'
 import { useAuth } from '../hooks/useAuth';
-import { useState, useEffect } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { FiMoon, FiSun, FiMenu, FiX, FiHome, FiUsers, FiBook, FiEdit2, FiTrash2 } from 'react-icons/fi';
 import styles from './admin.module.css';
+import debounce from 'lodash/debounce';
 
 
 interface User {
@@ -66,7 +67,7 @@ export default function AdminPage() {
     if (selectedPage === 'users') {
       fetchUsers();
     }
-  }, [selectedPage, pagination.page, filters]);
+  }, [selectedPage, pagination.page, filters.search, filters.role]);
 
   const fetchUsers = async () => {
     try {
@@ -185,6 +186,13 @@ export default function AdminPage() {
     document.documentElement.classList.toggle('dark', newMode);
   };
 
+  const debouncedSearch = useCallback(
+    debounce((value: string) => {
+      setFilters((prev) => ({ ...prev, search: value }));
+    }, 100),
+    []
+  );
+
   if (loading) return <div className={styles.loading}>Carregando...</div>;
   if (!user || user.role !== 'admin') return <div className={styles.unauthorized}>Acesso não autorizado</div>;
 
@@ -290,7 +298,7 @@ export default function AdminPage() {
                   placeholder="Buscar por nome ou email..."
                   className={styles.filterInput}
                   value={filters.search}
-                  onChange={(e) => setFilters({...filters, search: e.target.value})}
+                  onChange={(e) => debouncedSearch(e.target.value)}
                 />
                 
                 <select
