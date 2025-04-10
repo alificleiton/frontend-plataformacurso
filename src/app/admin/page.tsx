@@ -1,9 +1,10 @@
 'use client'
 import { useAuth } from '../hooks/useAuth';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { FiMoon, FiSun, FiMenu, FiX, FiHome, FiUsers, FiBook, FiEdit2, FiTrash2 } from 'react-icons/fi';
 import styles from './admin.module.css';
 import debounce from 'lodash/debounce';
+import { useRouter } from 'next/navigation';
 
 
 interface User {
@@ -17,14 +18,49 @@ interface User {
 
 const SidebarLogo = ({ user }: { user: any }) => {
   const [imgSrc, setImgSrc] = useState(user.avatarUrl?.trim() || '/default-avatar.png');
+  const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+
+  const handleEditProfile = () => {
+    setOpen(false);
+    window.dispatchEvent(new CustomEvent('navigateTo', { detail: 'edit-profile' }));
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken'); // ou cookie/session
+    router.push('/login');
+  };
 
   return (
-    <div className={styles.sidebarLogo}>
+    <div className={styles.wrapper} ref={wrapperRef}>
       <img
         src={imgSrc}
-        alt={`Avatar de ${user.avatarUrl}`}
+        alt={`Avatar de ${user.name}`}
         onError={() => setImgSrc('/default-avatar.png')}
+        onClick={() => setOpen(!open)}
+        className={styles.avatar}
       />
+
+      {open && (
+        <div className={styles.dropdown}>
+          <ul>
+            <li onClick={handleEditProfile}>Editar perfil</li>
+            <li onClick={handleLogout}>Sair</li>
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
@@ -59,6 +95,13 @@ export default function AdminPage() {
     role: 'admin' as 'admin' | 'professor' | 'aluno',
   });
 
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [profileForm, setProfileForm] = useState({
+    name: user?.name || '',
+    email: user?.email || '',
+    imagem: user?.avatarUrl || '',
+  });
+
   // Configura responsividade e tema
   useEffect(() => {
     const handleResize = () => {
@@ -77,12 +120,31 @@ export default function AdminPage() {
     };
   }, []);
 
+  useEffect(() => {
+    const handleNavigate = (e: any) => {
+      setSelectedPage(e.detail);
+    };
+    window.addEventListener('navigateTo', handleNavigate);
+    return () => window.removeEventListener('navigateTo', handleNavigate);
+  }, []);
+
   // Busca usuários quando a página ou filtros mudam
   useEffect(() => {
     if (selectedPage === 'users') {
       fetchUsers();
     }
   }, [selectedPage, pagination.page, filters.search, filters.role]);
+
+  // Adicione este useEffect logo após os outros useEffect existentes
+  useEffect(() => {
+    if (user) {
+      setProfileForm({
+        name: user.name || '',
+        email: user.email || '',
+        imagem: user.avatarUrl || '',
+      });
+    }
+  }, [user]); // Dependência do user para atualizar quando o user mudar
 
   const fetchUsers = async () => {
     try {
@@ -166,6 +228,14 @@ export default function AdminPage() {
     });
   };
 
+  const handleProfileFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setProfileForm({
+      ...profileForm,
+      [name]: value,
+    });
+  };
+
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingUser) return;
@@ -191,6 +261,45 @@ export default function AdminPage() {
     } catch (err: any) {
       setError(err instanceof Error ? err.message : 'Erro desconhecido ao atualizar usuário');
       console.error('Erro ao atualizar usuário:', err);
+    }
+  };
+
+  const handleProfileUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      const token = localStorage.getItem('authToken');
+      const formData = new FormData();
+      
+      // Adiciona os campos do formulário
+      formData.append('name', profileForm.name);
+      formData.append('email', profileForm.email);
+      
+      // Adiciona a imagem se foi selecionada
+      if (selectedImage) {
+        formData.append('avatar', selectedImage);
+      }
+  
+      const response = await fetch(`http://localhost:3000/auth/update-profile`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          // Remova o Content-Type: application/json quando usar FormData
+          // O navegador irá definir o content-type adequado com o boundary
+        },
+        body: formData, // Usa FormData em vez de JSON
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Erro ao atualizar perfil');
+      }
+  
+      alert('Perfil atualizado com sucesso!');
+      setSelectedPage('dashboard');
+    } catch (err: any) {
+      setError(err instanceof Error ? err.message : 'Erro desconhecido ao atualizar perfil');
+      console.error('Erro ao atualizar perfil:', err);
     }
   };
 
@@ -300,6 +409,7 @@ export default function AdminPage() {
       <main className={`${styles.mainContent} ${isCollapsed ? styles.collapsed : ''}`}>
         <div className={styles.contentBox}>
           <h1>
+            {selectedPage === 'edit-profile' && '✏️ Editar Perfil'}
             {selectedPage === 'dashboard' && '📊 Dashboard'}
             {selectedPage === 'users' && '👤 Gestão de Usuários'}
             {selectedPage === 'courses' && '📚 Gestão de Cursos'}
@@ -498,6 +608,67 @@ export default function AdminPage() {
                   </div>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Novo conteúdo da aba Editar Perfil */}
+          {selectedPage === 'edit-profile' && (
+            <div className={styles.editProfileContainer}>
+              <form onSubmit={handleProfileUpdate} className={styles.editProfileForm}>
+                <div className={styles.profileImageSection}>
+                  <label htmlFor="avatarUpload">
+                    <img
+                      src={user.avatarUrl?.trim() || '/default-avatar.png'}
+                      alt="Avatar"
+                      className={styles.editProfileAvatar}
+                    />
+                  </label>
+                  <input
+                    type="file"
+                    id="avatarUpload"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const imageUrl = URL.createObjectURL(file);
+                        const preview = document.querySelector(`.${styles.editProfileAvatar}`) as HTMLImageElement;
+                        if (preview) preview.src = imageUrl;
+                        setSelectedImage(file); // Armazena o arquivo selecionado
+                      }
+                    }}
+                    className={styles.fileInput}
+                  />
+                </div>
+
+                <div className={styles.editProfileFields}>
+                  <label>
+                    Nome:
+                    <input
+                      type="text"
+                      name="name"
+                      value={profileForm.name}
+                      onChange={handleProfileFormChange}
+                      className={styles.editInput}
+                    />
+                  </label>
+
+                  <label>
+                    Email:
+                    <input
+                      type="email"
+                      name="email"
+                      value={profileForm.email}
+                      onChange={handleProfileFormChange}
+                      className={styles.editInput}
+                      readOnly // Opcional: email pode ser fixo
+                    />
+                  </label>
+                </div>
+
+                <button type="submit" className={styles.saveButton}>
+                  Salvar Alterações
+                </button>
+              </form>
             </div>
           )}
           
