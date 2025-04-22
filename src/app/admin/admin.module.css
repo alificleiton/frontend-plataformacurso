@@ -823,3 +823,567 @@
 .saveButton:hover {
   background: #45a049;
 }
+
+/* Estilos para a tabela de cursos */
+/* Container principal */
+.coursesContainer {
+  padding: 20px;
+}
+
+/* Filtros */
+.courseFilters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.searchInput {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.categorySelect {
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  min-width: 200px;
+}
+
+/* Grid de cards */
+.courseGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.courseCard {
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.courseCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.courseImage {
+  height: 160px;
+  overflow: hidden;
+}
+
+.courseImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.courseInfo {
+  padding: 15px;
+}
+
+.courseInfo h3 {
+  margin: 0 0 5px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.courseInfo span {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Modal de detalhes */
+.courseModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.closeModal {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+}
+
+.modalHeader {
+  text-align: center;
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.modalImage {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.modalBody {
+  padding: 20px;
+}
+
+.formGroup {
+  margin-bottom: 15px;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #444;
+}
+
+.formGroup p {
+  margin: 0;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 4px;
+}
+
+.formRow {
+  display: flex;
+  gap: 15px;
+}
+
+.formRow .formGroup {
+  flex: 1;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .courseFilters {
+    flex-direction: column;
+  }
+  
+  .courseGrid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+  
+  .formRow {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+/* Adicione ao CSS */
+.searchContainer {
+  position: relative;
+  flex: 1;
+  max-width: 500px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 12px 20px 12px 40px;
+  border: 2px solid var(--border);
+  border-radius: 30px;
+  font-size: 16px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2);
+}
+
+.searchIcon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+}
+
+/* Adicione ao CSS */
+.courseGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 20px;
+}
+
+.courseCard {
+  background: var(--bg-primary);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border: 1px solid var(--border);
+}
+
+.courseCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.courseImage {
+  position: relative;
+  height: 160px;
+  overflow: hidden;
+}
+
+.courseImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.courseCard:hover .courseImage img {
+  transform: scale(1.05);
+}
+
+.coursePrice {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.courseContent {
+  padding: 15px;
+}
+
+.courseContent h3 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  color: var(--text-primary);
+}
+
+.courseDescription {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin: 0 0 15px 0;
+  line-height: 1.4;
+}
+
+.courseFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.courseProfessor {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.deleteButton {
+  background: none;
+  border: none;
+  color: #f44336;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.deleteButton:hover {
+  background: rgba(244, 67, 54, 0.1);
+}
+
+/* Adicione ao CSS */
+.courseModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(5px);
+}
+
+.modalContent {
+  background: var(--bg-primary);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: modalFadeIn 0.3s ease;
+}
+
+.modalHeader {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.modalImageContainer {
+  height: 250px;
+  overflow: hidden;
+}
+
+.modalImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modalTitleSection {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modalTitleSection h2 {
+  margin: 0 0 10px 0;
+  font-size: 24px;
+  color: var(--text-primary);
+}
+
+.courseMeta {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  font-size: 14px;
+}
+
+.courseMeta span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-secondary);
+}
+
+.coursePrice {
+  font-weight: bold;
+  color: var(--accent) !important;
+}
+
+.modalBody {
+  padding: 20px;
+}
+
+.section {
+  margin-bottom: 25px;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  color: var(--text-primary);
+  margin: 0 0 15px 0;
+}
+
+.sectionContent {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+  justify-content: flex-end;
+}
+
+.editButton, .deleteButton {
+  padding: 10px 20px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.editButton {
+  background: var(--accent);
+  color: white;
+  border: none;
+}
+
+.editButton:hover {
+  background: #1565c0;
+}
+
+.deleteButton {
+  background: none;
+  border: 1px solid #f44336;
+  color: #f44336;
+}
+
+.deleteButton:hover {
+  background: rgba(244, 67, 54, 0.1);
+}
+
+.closeModal {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  color: white;
+  transition: background 0.2s;
+}
+
+.closeModal:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .modalImageContainer {
+    height: 200px;
+  }
+  
+  .courseMeta {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .actionButtons {
+    flex-direction: column;
+  }
+  
+  .editButton, .deleteButton {
+    justify-content: center;
+  }
+}
+
+/* Adicione ao CSS */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  gap: 20px;
+}
+
+.loadingSpinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+  color: var(--text-secondary);
+  gap: 15px;
+}
+
+.emptyState h3 {
+  color: var(--text-primary);
+  margin: 0;
+}
+
+
+@media (max-width: 768px) {
+  .courseGrid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 15px;
+  }
+  
+  .courseCard {
+    border-radius: 8px;
+  }
+  
+  .courseImage {
+    height: 140px;
+  }
+  
+  .courseContent {
+    padding: 12px;
+  }
+  
+  .courseContent h3 {
+    font-size: 16px;
+  }
+  
+  .courseDescription {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .courseGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .searchInput {
+    padding: 10px 15px 10px 35px;
+  }
+  
+  .searchIcon {
+    left: 12px;
+  }
+}

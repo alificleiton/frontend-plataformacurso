@@ -1,7 +1,7 @@
 'use client'
 import { useAuth } from '../hooks/useAuth';
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { FiMoon, FiSun, FiMenu, FiX, FiHome, FiUsers, FiBook, FiEdit2, FiTrash2 } from 'react-icons/fi';
+import { FiMoon, FiSun, FiMenu, FiX, FiHome, FiUsers, FiBook, FiEdit2, FiTrash2, FiSearch, FiUser, FiCalendar } from 'react-icons/fi';
 import styles from './admin.module.css';
 import debounce from 'lodash/debounce';
 import { useRouter } from 'next/navigation';
@@ -14,6 +14,22 @@ interface User {
   role: 'admin' | 'professor' | 'aluno';
   avatarUrl: string, // Use o ? se for opcional
   createdAt: string;
+}
+
+// Adicione esta interface junto com as outras no início do arquivo
+interface Course {
+  _id: string;
+  title: string;
+  description: string;
+  price: number;
+  professorId: {
+    _id: string;
+    name: string;
+    email: string;
+  };
+  thumbnailUrl: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 const SidebarLogo = ({ user }: { user: any }) => {
@@ -102,6 +118,17 @@ export default function AdminPage() {
     imagem: user?.avatarUrl || '',
   });
 
+  // Dentro do componente AdminPage, adicione esses estados após os estados de users
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [isLoadingCourses, setIsLoadingCourses] = useState(false);
+  const [courseError, setCourseError] = useState('');
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+
+  const [courseFilters, setCourseFilters] = useState({
+    search: '',
+  });
+
+  
   // Configura responsividade e tema
   useEffect(() => {
     const handleResize = () => {
@@ -145,6 +172,50 @@ export default function AdminPage() {
       });
     }
   }, [user]); // Dependência do user para atualizar quando o user mudar
+
+   // Busca cursos com filtros
+   const fetchCourses = async () => {
+    try {
+      setIsLoadingCourses(true);
+      setCourseError('');
+      
+      const token = localStorage.getItem('authToken');
+      if (!token) throw new Error('Token de autenticação não encontrado');
+  
+      // Extrai apenas o filtro de busca por nome
+      const { search = '' } = filters;
+      
+      // Constrói a URL
+      const url = new URL('http://localhost:3000/courses');
+      if (search) {
+        url.searchParams.append('search', search);
+      }
+      
+      const response = await fetch(url.toString(), {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        }
+      });
+  
+      if (!response.ok) {
+        throw new Error('Erro ao buscar cursos');
+      }
+  
+      const data = await response.json();
+      
+      // Verifica se a resposta tem dados válidos
+      const receivedCourses = Array.isArray(data.data) ? data.data : data;
+      
+      setCourses(receivedCourses || []);
+    } catch (err) {
+      setCourseError(err instanceof Error ? err.message : 'Erro desconhecido');
+      console.error('Erro ao buscar cursos:', err);
+      setCourses([]);
+    } finally {
+      setIsLoadingCourses(false);
+    }
+  };
+
 
   const fetchUsers = async () => {
     try {
@@ -302,6 +373,46 @@ export default function AdminPage() {
       console.error('Erro ao atualizar perfil:', err);
     }
   };
+
+  // Adicione este useEffect para carregar cursos quando a página de cursos for selecionada
+  useEffect(() => {
+    if (selectedPage === 'courses') {
+      fetchCourses();
+    }
+  }, [selectedPage, filters.search]);
+
+  // Adicione esta função para deletar cursos
+  const handleDeleteCourse = async (courseId: string) => {
+    if (!confirm('Tem certeza que deseja excluir este curso?')) return;
+    
+    try {
+      const token = localStorage.getItem('authToken');
+      const response = await fetch(`http://localhost:3000/courses/${courseId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        }
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Erro ao excluir curso');
+      }
+      
+      fetchCourses();
+    } catch (err: any) {
+      setCourseError(err instanceof Error ? err.message : 'Erro desconhecido ao excluir curso');
+      console.error('Erro ao excluir curso:', err);
+    }
+  };
+
+  // Adicione esta função para o debounce da busca de cursos
+  const debouncedCourseSearch = useCallback(
+    debounce((value: string) => {
+      setCourseFilters(prev => ({ ...prev, search: value }));
+    }, 300),
+    []
+  );
 
   const toggleDarkMode = () => {
     const newMode = !darkMode;
@@ -669,6 +780,157 @@ export default function AdminPage() {
                   Salvar Alterações
                 </button>
               </form>
+            </div>
+          )}
+
+          {selectedPage === 'courses' && (
+            <div className={styles.coursesContainer}>
+              {/* Filtros */}
+              <div className={styles.courseFilters}>
+                <div className={styles.searchContainer}>
+                  <input
+                    type="text"
+                    placeholder="Buscar cursos..."
+                    value={filters.search}
+                    onChange={(e) => setFilters({...filters, search: e.target.value})}
+                    className={styles.searchInput}
+                  />
+                  <FiSearch className={styles.searchIcon} />
+                </div>
+              </div>
+
+              {/* Cards de cursos */}
+              
+              {isLoadingCourses ? (
+                <div className={styles.loadingContainer}>
+                  <div className={styles.loadingSpinner}></div>
+                  <p>Carregando cursos...</p>
+                </div>
+              ) : courseError ? (
+                <div className={styles.error}>{courseError}</div>
+              ) : courses.length === 0 ? (
+                <div className={styles.emptyState}>
+                  <FiBook size={48} />
+                  <h3>Nenhum curso encontrado</h3>
+                  <p>Parece que não há cursos disponíveis no momento.</p>
+                </div>
+              ) : (
+                <div className={styles.courseGrid}>
+                  {courses.map(course => (
+                    <div 
+                      key={course._id} 
+                      className={styles.courseCard}
+                      onClick={() => setSelectedCourse(course)}
+                    >
+                      <div className={styles.courseImage}>
+                        <img 
+                          src={course.thumbnailUrl || '/default-course.png'} 
+                          alt={course.title}
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = '/default-course.png';
+                          }}
+                        />
+                        <div className={styles.coursePrice}>
+                          {course.price.toLocaleString('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL'
+                          })}
+                        </div>
+                      </div>
+                      
+                      <div className={styles.courseContent}>
+                        <h3>{course.title}</h3>
+                        <p className={styles.courseDescription}>
+                          {course.description.length > 100 
+                            ? `${course.description.substring(0, 100)}...` 
+                            : course.description}
+                        </p>
+                        
+                        <div className={styles.courseFooter}>
+                          <span className={styles.courseProfessor}>
+                            <FiUser size={14} /> {course.professorId?.name}
+                          </span>
+                          <button 
+                            className={styles.deleteButton}
+                            onClick={(e) => {
+                              e.stopPropagation(); // Isso previne que o clique no botão dispare o onClick do card
+                              handleDeleteCourse(course._id);
+                            }}
+                          >
+                            <FiTrash2 size={16} />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Modal com detalhes do curso */}
+              
+              {selectedCourse && (
+                <div className={styles.courseModal}>
+                  <div className={styles.modalContent}>
+                    <button 
+                      className={styles.closeModal}
+                      onClick={() => setSelectedCourse(null)}
+                    >
+                      <FiX size={24} />
+                    </button>
+                    
+                    <div className={styles.modalHeader}>
+                      <div className={styles.modalImageContainer}>
+                        <img 
+                          src={selectedCourse.thumbnailUrl || '/default-course.png'} 
+                          alt={selectedCourse.title}
+                          className={styles.modalImage}
+                        />
+                      </div>
+                      <div className={styles.modalTitleSection}>
+                        <h2>{selectedCourse.title}</h2>
+                        <div className={styles.courseMeta}>
+                          <span className={styles.coursePrice}>
+                            {selectedCourse.price.toLocaleString('pt-BR', {
+                              style: 'currency',
+                              currency: 'BRL'
+                            })}
+                          </span>
+                          <span className={styles.courseProfessor}>
+                            <FiUser size={16} /> {selectedCourse.professorId?.name}
+                          </span>
+                          <span className={styles.courseDate}>
+                            <FiCalendar size={16} /> Criado em: {new Date(selectedCourse.createdAt).toLocaleDateString('pt-BR')}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className={styles.modalBody}>
+                      <div className={styles.section}>
+                        <h3 className={styles.sectionTitle}>
+                          <FiBook size={20} /> Descrição do Curso
+                        </h3>
+                        <p className={styles.sectionContent}>{selectedCourse.description}</p>
+                      </div>
+                      
+                      <div className={styles.actionButtons}>
+                        <button className={styles.editButton}>
+                          <FiEdit2 size={18} /> Editar Curso
+                        </button>
+                        <button 
+                          className={styles.deleteButton}
+                          onClick={() => {
+                            setSelectedCourse(null);
+                            handleDeleteCourse(selectedCourse._id);
+                          }}
+                        >
+                          <FiTrash2 size={18} /> Excluir Curso
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
           
