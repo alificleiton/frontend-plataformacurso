@@ -1,148 +1,6 @@
-.editProfileContainer {
-    display: flex;
-    justify-content: center;
-    padding: 2rem;
-    width: 100%;
-  }
-  
-  .editProfileForm {
-    max-width: 500px;
-    width: 100%;
-    background: var(--bg-primary);
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .profileImageSection {
-    text-align: center;
-    margin-bottom: 1rem;
-    position: relative;
-  }
-  
-  .editProfileAvatar {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-    border: 3px solid var(--accent);
-  }
-  
-  .editProfileAvatar:hover {
-    transform: scale(1.05);
-  }
-  
-  .changePhotoText {
-    display: block;
-    margin-top: 8px;
-    font-size: 0.9rem;
-    color: var(--accent);
-    cursor: pointer;
-  }
-  
-  .fileInput {
-    display: none;
-  }
-  
-  .editProfileFields {
-    margin-top: 1.5rem;
-  }
-  
-  .formGroup {
-    margin-bottom: 1.5rem;
-  }
-  
-  .formGroup label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: var(--text-primary);
-  }
-  
-  .editInput {
-    width: 100%;
-    padding: 0.8rem;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-    transition: border-color 0.2s;
-  }
-  
-  .editInput:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
-  }
-  
-  .editInput[readonly] {
-    background-color: var(--bg-secondary);
-    cursor: not-allowed;
-  }
-  
-  .saveButton {
-    margin-top: 1.5rem;
-    width: 100%;
-    padding: 0.8rem;
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  
-  .saveButton:hover {
-    background: var(--primary-dark);
-  }
-  
-  .error {
-    color: #f44336;
-    padding: 10px;
-    background-color: #ffebee;
-    border-radius: 4px;
-    margin-bottom: 15px;
-    text-align: center;
-  }
-
-  .editProfileContainer {
-    position: relative; /* Permite posicionamento absoluto do botão X */
-    /* outros estilos existentes */
-  }
-  
-  .closeButton {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #666;
-    padding: 5px 10px;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-  }
-  
-  .closeButton:hover {
-    color: #333;
-    background-color: #f0f0f0;
-  }
-  
-  /* Se estiver usando modo escuro */
-  .dark .closeButton {
-    color: #aaa;
-  }
-  
-  .dark .closeButton:hover {
-    color: #fff;
-    background-color: #444;
-  }
-
-  /* Estilos para o overlay da modal */
+/* ==================== */
+/* ESTRUTURA PRINCIPAL */
+/* ==================== */
 .modalOverlay {
   position: fixed;
   top: 0;
@@ -156,10 +14,9 @@
   z-index: 1000;
 }
 
-/* Container da modal */
 .modalContainer {
   position: relative;
-  background-color: white;
+  background-color: white; /* Fundo branco */
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -167,6 +24,122 @@
   max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
+}
+
+.editProfileContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  width: 100%;
+}
+
+.editProfileForm {
+  width: 100%;
+  background: white; /* Garante fundo branco */
+  padding: 0; /* Removemos o padding extra */
+}
+
+.dark .modalContainer,
+.dark .editProfileForm {
+  background-color: #2d3748;
+  color: white;
+}
+
+/* ============= */
+/* COMPONENTES */
+/* ============= */
+/* Seção da imagem do perfil */
+.profileImageSection {
+  text-align: center;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.editProfileAvatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  border: 3px solid var(--accent);
+}
+
+.editProfileAvatar:hover {
+  transform: scale(1.05);
+}
+
+.changePhotoText {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.fileInput {
+  display: none;
+}
+
+/* Campos do formulário */
+.editProfileFields {
+  margin-top: 1.5rem;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.editInput {
+  width: 100%;
+  padding: 0.8rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: border-color 0.2s;
+}
+
+.editInput:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+}
+
+.editInput[readonly] {
+  background-color: var(--bg-secondary);
+  cursor: not-allowed;
+}
+
+/* Ações do formulário */
+.formActions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.saveButton {
+  width: 100%;
+  padding: 0.8rem;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.saveButton:hover {
+  background: var(--primary-dark);
 }
 
 /* Botão de fechar */
@@ -193,17 +166,19 @@
   background-color: #f0f0f0;
 }
 
-
-
-.formActions {
-  margin-top: 1.5rem;
-  display: flex;
-  justify-content: flex-end;
+/* Mensagem de erro */
+.error {
+  color: #f44336;
+  padding: 10px;
+  background-color: #ffebee;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  text-align: center;
 }
 
-
-
-/* Modo escuro */
+/* ============= */
+/* MODO ESCURO */
+/* ============= */
 .dark .modalContainer {
   background-color: #2d3748;
   color: white;
@@ -216,4 +191,106 @@
 .dark .closeButton:hover {
   color: white;
   background-color: #4a5568;
+}
+
+/* ==================== */
+/* MODAL NO MODO ESCURO */
+/* ==================== */
+.dark .modalContainer {
+  background-color: #1a202c; /* Fundo mais escuro */
+  color: #e2e8f0; /* Texto claro */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Textos */
+.dark .header h2 {
+  color: #ffffff; /* Branco puro para títulos */
+}
+
+.dark .header p {
+  color: #a0aec0; /* Cinza claro para texto secundário */
+}
+
+/* Campos do formulário */
+.dark .editInput {
+  background-color: #2d3748; /* Fundo escuro para inputs */
+  color: #e2e8f0; /* Texto claro */
+  border-color: #4a5568; /* Borda mais visível */
+}
+
+.dark .editInput:focus {
+  border-color: #63b3ed; /* Azul mais vibrante no focus */
+  box-shadow: 0 0 0 2px rgba(99, 179, 237, 0.3);
+}
+
+.dark .editInput[readonly] {
+  background-color: #2d3748; /* Fundo escuro */
+  color: #a0aec0; /* Texto cinza para campos readonly */
+}
+
+/* Botão de salvar */
+.dark .saveButton {
+  background-color: #4299e1; /* Azul mais vibrante */
+  color: white;
+}
+
+.dark .saveButton:hover {
+  background-color: #3182ce; /* Tom mais escuro no hover */
+}
+
+/* Foto de perfil */
+.dark .editProfileAvatar {
+  border-color: #4299e1; /* Borda azul */
+}
+
+.dark .changePhotoText {
+  color: #4299e1; /* Azul para o texto */
+}
+
+/* Botão de fechar */
+.dark .closeButton {
+  color: #cbd5e0; /* Cinza claro */
+}
+
+.dark .closeButton:hover {
+  color: white;
+  background-color: #4a5568;
+}
+
+/* Mensagem de erro */
+.dark .error {
+  color: #fc8181; /* Vermelho claro */
+  background-color: #742a2a; /* Fundo vermelho escuro */
+}
+
+.userInfo {
+  margin: 1.5rem 0;
+}
+
+.infoField {
+  margin-bottom: 1rem;
+}
+
+.infoField label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  color: var(--text-secondary);
+}
+
+.infoValue {
+  padding: 0.75rem;
+  background-color: var(--bg-secondary);
+  border-radius: 6px;
+  color: var(--text-primary);
+}
+
+/* Modo escuro para informações */
+.dark .infoValue {
+  background-color: #2d3748;
+  color: #e2e8f0;
+}
+
+.dark .infoField label {
+  color: #a0aec0;
 }
