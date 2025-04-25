@@ -1,10 +1,12 @@
 // types/user.ts
-export type User = {
-    userId: string;
-    email: string;
-    name?: string; // Opcional
-    role: 'admin' | 'professor' | 'aluno';
-    exp?: number; // Timestamp de expiração
-    iat?: number; // Timestamp de emissão
-    avatarUrl?: string; // 👈 Adicione isso
-  };
+export interface User {
+  _id: string;
+  userId: string;
+  email: string;
+  name: string;
+  role: 'admin' | 'professor' | 'aluno';
+  createdAt: string;
+  avatarUrl?: string;
+  exp?: number;
+  iat?: number;
+}

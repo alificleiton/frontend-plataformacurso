@@ -1,0 +1,144 @@
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    position: fixed;
+    left: 0;
+    top: 60px;
+    transition: 
+      width var(--transition-speed) var(--transition-easing),
+      background-color 0.2s ease;
+    overflow-y: auto;
+    border-right: 1px solid var(--border);
+    z-index: 900;
+    will-change: transform, width;
+  }
+  
+  .sidebar.collapsed {
+    width: 72px;
+  }
+  
+  .sidebar nav ul {
+    list-style: none;
+    padding-top: 20px;
+  }
+  
+  .sidebar nav ul li button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 24px;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: 
+      background var(--transition-speed) var(--transition-easing),
+      color 0.2s ease,
+      transform 0.1s ease-out,
+      padding 0.2s ease;
+  }
+  
+  .sidebar nav ul li button:hover {
+    background: var(--hover-bg);
+    transform: translateX(3px);
+  }
+  
+  .sidebar nav ul li button.active {
+    background: var(--hover-bg);
+    color: var(--accent);
+    padding-left: 28px;
+  }
+  
+  .sidebar.collapsed nav ul li button {
+    justify-content: center;
+    padding: 12px 0;
+  }
+  
+  .sidebar.collapsed nav ul li button span {
+    opacity: 0;
+    width: 0;
+    transition: 
+      opacity 0.15s ease,
+      width 0.1s ease 0.15s;
+  }
+  
+  .sidebar:not(.collapsed) nav ul li button span {
+    opacity: 1;
+    width: auto;
+    transition: 
+      opacity 0.3s ease 0.1s,
+      width 0.1s ease;
+  }
+  
+  @media (max-width: 768px) {
+    .sidebar {
+      transform: translateX(-100%);
+      width: 280px;
+    }
+    
+    .sidebar.open {
+      transform: translateX(0);
+    }
+    
+    .sidebar.collapsed {
+      width: 280px;
+    }
+  }
+
+
+  .wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    cursor: pointer;
+    object-fit: cover;
+    display: block;
+  }
+  
+  .dropdown {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    width: 150px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+  }
+  
+  .dropdown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .dropdown li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .dropdown li:hover {
+    background-color: #f2f2f2;
+  }
+  
+  /* Dark mode styles */
+  .dark .dropdown {
+    background-color: var(--dark-bg-primary);
+    border-color: var(--dark-border);
+  }
+  
+  .dark .dropdown li:hover {
+    background-color: var(--dark-hover-bg);
+  }

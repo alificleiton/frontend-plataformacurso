@@ -1,0 +1,219 @@
+.editProfileContainer {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    width: 100%;
+  }
+  
+  .editProfileForm {
+    max-width: 500px;
+    width: 100%;
+    background: var(--bg-primary);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profileImageSection {
+    text-align: center;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  
+  .editProfileAvatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    border: 3px solid var(--accent);
+  }
+  
+  .editProfileAvatar:hover {
+    transform: scale(1.05);
+  }
+  
+  .changePhotoText {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: var(--accent);
+    cursor: pointer;
+  }
+  
+  .fileInput {
+    display: none;
+  }
+  
+  .editProfileFields {
+    margin-top: 1.5rem;
+  }
+  
+  .formGroup {
+    margin-bottom: 1.5rem;
+  }
+  
+  .formGroup label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  
+  .editInput {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: border-color 0.2s;
+  }
+  
+  .editInput:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+  }
+  
+  .editInput[readonly] {
+    background-color: var(--bg-secondary);
+    cursor: not-allowed;
+  }
+  
+  .saveButton {
+    margin-top: 1.5rem;
+    width: 100%;
+    padding: 0.8rem;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .saveButton:hover {
+    background: var(--primary-dark);
+  }
+  
+  .error {
+    color: #f44336;
+    padding: 10px;
+    background-color: #ffebee;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  .editProfileContainer {
+    position: relative; /* Permite posicionamento absoluto do botão X */
+    /* outros estilos existentes */
+  }
+  
+  .closeButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    padding: 5px 10px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+  }
+  
+  .closeButton:hover {
+    color: #333;
+    background-color: #f0f0f0;
+  }
+  
+  /* Se estiver usando modo escuro */
+  .dark .closeButton {
+    color: #aaa;
+  }
+  
+  .dark .closeButton:hover {
+    color: #fff;
+    background-color: #444;
+  }
+
+  /* Estilos para o overlay da modal */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Container da modal */
+.modalContainer {
+  position: relative;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Botão de fechar */
+.closeButton {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.closeButton:hover {
+  color: #333;
+  background-color: #f0f0f0;
+}
+
+
+
+.formActions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+
+
+/* Modo escuro */
+.dark .modalContainer {
+  background-color: #2d3748;
+  color: white;
+}
+
+.dark .closeButton {
+  color: #a0aec0;
+}
+
+.dark .closeButton:hover {
+  color: white;
+  background-color: #4a5568;
+}
