@@ -75,3 +75,54 @@
       grid-template-columns: 1fr;
     }
   }
+
+  .coursesContainer {
+    padding: 20px;
+    width: 100%;
+  }
+
+  .courseFilters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .searchContainer {
+    position: relative;
+    flex: 1;
+    max-width: 400px;
+  }
+
+  .searchInput {
+    width: 100%;
+    padding: 10px 40px 10px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 16px;
+  }
+
+  .searchIcon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+  }
+
+  .createButton {
+    padding: 10px 20px;
+    background-color: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+  }
+
+  .createButton:hover {
+    background-color: var(--primary-dark);
+  }

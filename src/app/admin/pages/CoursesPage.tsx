@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { CoursesGrid } from '../components/Courses/CoursesGrid';
 import { CourseModal } from '../components/Courses/CourseModal';
+import { CreateCourseModal } from '../components/Courses/CreateCourseModal';
 import { useCourses } from '../hooks/useCourses';
 import styles from './styles.module.css';
 import { FiSearch } from 'react-icons/fi';
@@ -61,7 +62,15 @@ export const CoursesPage = () => {
         />
       )}
 
-      {/* Modal de criação seria implementado aqui */}
+      {showCreateModal && (
+        <CreateCourseModal
+          onClose={() => setShowCreateModal(false)}
+          onSuccess={() => {
+            fetchCourses();
+            setShowCreateModal(false);
+          }}
+        />
+      )}
     </div>
   );
 };
