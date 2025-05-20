@@ -21,6 +21,11 @@ export const CoursesPage = () => {
 
   const [showCreateModal, setShowCreateModal] = useState(false);
 
+  const handleSuccess = () => {
+    fetchCourses();
+    setSelectedCourse(null);
+  };
+
   return (
     <div className={styles.coursesContainer}>
       <div className={styles.courseFilters}>
@@ -54,11 +59,8 @@ export const CoursesPage = () => {
         <CourseModal
           course={selectedCourse}
           onClose={() => setSelectedCourse(null)}
-          onEdit={() => {
-            // Implementar edição
-            console.log('Editar curso:', selectedCourse);
-          }}
-          onDelete={handleDeleteCourse}
+          onSuccess={handleSuccess}
+          onDelete={fetchCourses} // ← Aqui ele atualiza os cursos após exclusão
         />
       )}
 
